@@ -12,7 +12,7 @@ public class User{
 		return name;
 	}
 
-	public String setName(String name){
+	public setName(String name){
 		this.name = new String(name);
 	}
 }

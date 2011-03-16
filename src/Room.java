@@ -2,14 +2,16 @@ import java.util.Hashtable;
 
 public class Room{
 	String name;
-	LinkedList<String,User> users;
+	Hashtable<String,User> users;
 
 	public Room(){
 		name = new String("default");
+		users = new Hashtable();
 	}
 
 	public Room(String name){
 		this.name = new String(name);
+		users = new Hashtable();
 	}
 	
 	public User getUser(String name){
@@ -17,7 +19,7 @@ public class Room{
 	}
 	
 	public void addUser(String name){
-		return users.put(name,new User(name));
+		users.put(name,new User(name));
 	}
 
 	public User removeUser(String name){
