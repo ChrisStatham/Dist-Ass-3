@@ -1,8 +1,8 @@
-import java.util.LinkedList;
+import java.util.Hashtable;
 
 public class Room{
 	String name;
-	LinkedList users;
+	LinkedList<String,User> users;
 
 	public Room(){
 		name = new String("default");
@@ -12,15 +12,23 @@ public class Room{
 		this.name = new String(name);
 	}
 	
-	public addUser(){
-		
+	public User getUser(String name){
+		return users.get(name);
+	}
+	
+	public void addUser(String name){
+		return users.put(name,new User(name));
+	}
+
+	public User removeUser(String name){
+		return users.remove(name); 
 	}
 	
 	public String getName(){
 		return name;
 	}
 
-	public String setName(String name){
+	public void setName(String name){
 		this.name = new String(name);
 	}
 }
