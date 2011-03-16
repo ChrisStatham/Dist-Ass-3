@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<project name="test" default="compile" basedir=".">
+
+	<path id = "run.class.path">
+		<pathelement path="./build"/>
+	</path>
+
+	<target name="compile">
+		<mkdir dir="build"/>
+		<javac srcdir="./src" destdir="./build" >
+			<classpath refid="run.class.path"/>
+		</javac>
+		<rmic classname="Message" base="./build" >
+			<classpath refid="run.class.path"/>
+		</rmic>
+	</target>
+
+	<target name="run" depends="compile">
+		<java classname="Server" fork="yes">
+			<classpath refid="run.class.path"/>
+		</java>
+		<java classname="Client" fork="yes">
+			<classpath refid="run.class.path"/>
+		</java>
+	</target>
+
+        <target name="clean">
+		<delete dir="build"/>
+	</target>
+	
+	<target name="readme">
+		<echo> Name: Chris Statham</echo>
+		<echo> Student ID: 0590123</echo>
+		<echo> Distirbuted Systems Assigment 3</echo>
+	</target>
+</project>
