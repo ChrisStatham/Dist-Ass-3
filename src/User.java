@@ -1,6 +1,6 @@
 public class User{
-	String name;
-	public User(){
+	private String name;
+	public User(Client c){
 		name = new String("default");
 	}
 	

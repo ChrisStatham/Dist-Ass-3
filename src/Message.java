@@ -1,17 +1,26 @@
 import java.rmi.*;
 import java.rmi.server.*;
 
-public class Message extends UnicastRemoteObject implements MessageInterface {
+public class Message {
   private String message;
-  private String recepient;
+  private String type;
+  private String to;
 
-  public Message (String msg,String recv) throws RemoteException{
+  public Message (String msg,String type) throws RemoteException{
     message = msg;
-    recepient = recv;
+    this.type = type;
+  }
+	
+  public void setTo(String usr){
+    to = new String(usr); 
   }
 
-  public String to() throws RemoteException {
-    return recepient;
+  public String getTo(){
+    return to;
+  }
+
+  public String type() throws RemoteException {
+    return type;
   }
 
   public String say() throws RemoteException {
