@@ -18,30 +18,66 @@ public class Server extends UnicastRemoteObject implements ServerInterface{
     }
   }
 
-  public void joinRoom(Client c,String r) throws RemoteException{
-    Room room= rooms.get(r);
+  public void joinRoom(String clientName,String r) throws RemoteException{
+    Room room = rooms.get(r);
     if(room == null){
-      rooms.put(r,new Room(r)); 
+      room = new Room(r);
+      rooms.put(r,room); 
     }
-
-    //room.addUser(u);
+    try{
+      room.addClient((ClientInterface)Naming.lookup("//statham.ca/"+clientName));
+    } catch(Exception e){
+      System.out.println("Client could not join room: " + e);
+    }
   }
 
-  public void leaveRoom(Client c,String r) throws RemoteException{
+  public void leaveRoom(String c,String r) throws RemoteException{
     Room room = rooms.get(r);
     if(room == null) return;
-    //room.removeUser(u);
+    room.removeClient(c);
   }
 
-  public void sendMessage(Client c,Message m) throws RemoteException{
+  public void list(Message m){
+    try{
+    Room room = rooms.get(m.getTo());
+    Message msg = new Message("User List:","wisper",m.getFrom(),"Server");
+    room.getClient(m.getFrom()).recvMsg(msg);
+    for(ClientInterface c : room.users.values()){
+      msg = new Message(c.getName(),"wisper",m.getFrom(),"Server");
+      room.getClient(m.getFrom()).recvMsg(msg);
+    }
+    } catch(Exception e){
 
-   }
-
-  public void wisper(Client c, String userName,String room,String msg){
-  
+    }
   }
 
-  public void broadcast(Client c, String msg){
+  public void sendMsg(Message m) throws RemoteException{
+    if(m.getType().equals("wisper")){
+      wisper(m);
+    } else if(m.getType().equals("broadcast")){
+      broadcast(m);
+    } else if(m.getType().equals("list")){
+      list(m);
+    }else{ 
+      rooms.get(m.getTo()).sendMessage(m);    
+    }
+  }
 
+  public void wisper(Message m){
+    for(Room r: rooms.values()){
+      if((r.getClient(m.getTo())) != null){
+	try{
+        r.getClient(m.getTo()).recvMsg(m);
+	}catch(RemoteException e){
+
+        }
+      }
+    } 
+  }
+
+  public void broadcast(Message m){
+    for(Room r: rooms.values()){
+      r.sendMessage(m); 
+    }
   }
 }

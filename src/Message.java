@@ -1,14 +1,22 @@
 import java.rmi.*;
 import java.rmi.server.*;
+import java.io.Serializable;
 
-public class Message {
+public class Message implements Serializable{
+  private String from;
+  private String to;
   private String message;
   private String type;
-  private String to;
 
-  public Message (String msg,String type) throws RemoteException{
-    message = msg;
-    this.type = type;
+  public Message (String msg,String type,String room,String from){
+    this.to = new String(room);
+    message = new String(msg);
+    this.type = new String(type);
+    this.from = new String(from);
+  }
+
+  public String getFrom(){
+    return from;
   }
 	
   public void setTo(String usr){
@@ -19,11 +27,11 @@ public class Message {
     return to;
   }
 
-  public String type() throws RemoteException {
+  public String getType() {
     return type;
   }
 
-  public String say() throws RemoteException {
+  public String say() {
     return message;
   }
 }
